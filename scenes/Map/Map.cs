@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class Map : Node2D
 {
@@ -95,18 +96,27 @@ public partial class Map : Node2D
         Unit closestStorage = null;
         float closestDistance = float.MaxValue;
 
-        foreach (Node node in units.GetChildren())
-        {
-            if (node is Unit unit && unit.IsStorage && unit.PlayerName == playerName)
-            {
-                float distance = position.DistanceTo(unit.Position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestStorage = unit;
-                }
-            }
-        }
+		//ORG: foreach (Node node in units.GetChildren())
+		//Only Townhall with storage of owning player
+		foreach (Townhall th in units.GetChildren()
+			.Where(node => node is Townhall th)
+			.Where(th  => (th as Townhall).UnitPeerID == Multiplayer.GetUniqueId())
+			.Where(T => (T as Townhall).IsStorage == true)
+			.Cast<Townhall>()
+		)
+		{
+			GD.Print($"{playerName} / {th.Name}");
+			//ORG: if (node is Unit unit && unit.IsStorage && unit.PlayerName == playerName)
+			//if (node is Townhall unit && unit.IsStorage && unit.UnitPeerID == GetPlayer(playerName).PeerID)
+			{
+				float distance = position.DistanceTo(th.Position);
+				if (distance < closestDistance)
+				{
+					closestDistance = distance;
+					closestStorage = th;
+				}
+			}
+		}
 
         return closestStorage;
     }
