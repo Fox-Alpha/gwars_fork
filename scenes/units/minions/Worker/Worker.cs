@@ -34,6 +34,12 @@ public partial class Worker : Unit
 	}
 
 
+    public override void Worker()
+	{
+		AddReplicationProperty("ProgressBar:value", true, SceneReplicationConfig.ReplicationMode.OnChange);
+	}
+	
+	
     public override void _Ready()
     {
         base._Ready();
@@ -87,7 +93,7 @@ public partial class Worker : Unit
 
     private bool HandleGathering()
     {
-        if (materialTarget != null && amountOfMaterialInBag < MaxMaterialsInBag)
+        if (materialTarget != null && AmountOfMaterialInBag < MaxMaterialsInBag)
         {
             if (!IsInstanceValid(materialTarget))
             {
@@ -127,9 +133,9 @@ public partial class Worker : Unit
             {
                 Velocity = Vector2.Zero;
 
-                if (storageTarget.StoreMaterial(materialTypeInBag, amountOfMaterialInBag))
+                if (storageTarget.StoreMaterial(materialTypeInBag, AmountOfMaterialInBag))
                 {
-                    amountOfMaterialInBag = 0;
+                    AmountOfMaterialInBag = 0;
                     materialTypeInBag = "";
                 }
             }
@@ -249,19 +255,19 @@ public partial class Worker : Unit
             return;
         }
 
-        if (amountOfMaterialInBag >= MaxMaterialsInBag)
+        if (AmountOfMaterialInBag >= MaxMaterialsInBag)
         {
             return;
         }
 
         if (materialTypeInBag == materialTarget.MaterialType)
         {
-            amountOfMaterialInBag = Math.Min(MaxMaterialsInBag, amountOfMaterialInBag + GatherEfficiency);
+            AmountOfMaterialInBag = Math.Min(MaxMaterialsInBag, AmountOfMaterialInBag + GatherEfficiency);
         }
         else
         {
             materialTypeInBag = materialTarget.MaterialType;
-            amountOfMaterialInBag = GatherEfficiency;
+            AmountOfMaterialInBag = GatherEfficiency;
         }
     }
 
