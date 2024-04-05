@@ -11,7 +11,7 @@ public partial class Unit : CharacterBody2D
     public string PlayerName { get; set; } = "";
 
     [Export]
-	public long UnitPeerID { get; set; } = -1;
+    public long UnitPeerID { get; set; } = -1;
 
     public Map Map { get; set; } = null;
     public virtual bool IsRepairable { get; set; } = false;

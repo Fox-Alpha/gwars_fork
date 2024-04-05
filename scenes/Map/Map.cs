@@ -56,40 +56,40 @@ public partial class Map : Node2D
         return materials.GetNodeOrNull<Material>(name);
     }
 
-	public void ServerCreateEntity(Player player, string entityName, Vector2 position)
-	{
-		switch (entityName)
-		{
-			case "Worker":
-				Worker worker = (Worker)workerScene.Instantiate();
-				worker.PlayerName = player.Name;
-				worker.Map = this;
-				worker.Position = position;
-				worker.UnitPeerID = player.PeerID;
-				units.AddChild(worker, true);
-				break;
-			case "Townhall":
-				Townhall townhall = (Townhall)townhallScene.Instantiate();
-				townhall.PlayerName = player.Name;
-				townhall.Map = this;
-				townhall.Position = position;
-				townhall.UnitPeerID = player.PeerID;
-				units.AddChild(townhall, true);
-				break;
-			case "Tree":
-				Tree tree = (Tree)treeScene.Instantiate();
-				tree.Position = position;
-				materials.AddChild(tree, true);
-				break;
-			case "Berries":
-				Berries berries = (Berries)berriesScene.Instantiate();
-				berries.Position = position;
-				materials.AddChild(berries, true);
-				break;
-			default:
-				GD.Print("Unknown unit name: " + entityName);
-				break;
-		}
+    public void ServerCreateEntity(Player player, string entityName, Vector2 position)
+    {
+        switch (entityName)
+        {
+            case "Worker":
+                Worker worker = (Worker)workerScene.Instantiate();
+                worker.PlayerName = player.Name;
+                worker.Map = this;
+                worker.Position = position;
+                worker.UnitPeerID = player.PeerID;
+                units.AddChild(worker, true);
+                break;
+            case "Townhall":
+                Townhall townhall = (Townhall)townhallScene.Instantiate();
+                townhall.PlayerName = player.Name;
+                townhall.Map = this;
+                townhall.Position = position;
+                townhall.UnitPeerID = player.PeerID;
+                units.AddChild(townhall, true);
+                break;
+            case "Tree":
+                Tree tree = (Tree)treeScene.Instantiate();
+                tree.Position = position;
+                materials.AddChild(tree, true);
+                break;
+            case "Berries":
+                Berries berries = (Berries)berriesScene.Instantiate();
+                berries.Position = position;
+                materials.AddChild(berries, true);
+                break;
+            default:
+                GD.Print("Unknown unit name: " + entityName);
+                break;
+        }
 
     }
     public Unit GetClosestStorage(string playerName, Vector2 position)
@@ -97,27 +97,27 @@ public partial class Map : Node2D
         Unit closestStorage = null;
         float closestDistance = float.MaxValue;
 
-		//ORG: foreach (Node node in units.GetChildren())
-		//Only Townhall with storage of owning player
-		foreach (Townhall th in units.GetChildren()
-			.Where(node => node is Townhall th)
-			.Where(th  => (th as Townhall).UnitPeerID == Multiplayer.GetUniqueId())
-			.Where(T => (T as Townhall).IsStorage == true)
-			.Cast<Townhall>()
-		)
-		{
-			GD.Print($"{playerName} / {th.Name}");
-			//ORG: if (node is Unit unit && unit.IsStorage && unit.PlayerName == playerName)
-			//if (node is Townhall unit && unit.IsStorage && unit.UnitPeerID == GetPlayer(playerName).PeerID)
-			{
-				float distance = position.DistanceTo(th.Position);
-				if (distance < closestDistance)
-				{
-					closestDistance = distance;
-					closestStorage = th;
-				}
-			}
-		}
+        //ORG: foreach (Node node in units.GetChildren())
+        //Only Townhall with storage of owning player
+        foreach (Townhall th in units.GetChildren()
+            .Where(node => node is Townhall th)
+            .Where(th  => (th as Townhall).UnitPeerID == Multiplayer.GetUniqueId())
+            .Where(T => (T as Townhall).IsStorage == true)
+            .Cast<Townhall>()
+        )
+        {
+            GD.Print($"{playerName} / {th.Name}");
+            //ORG: if (node is Unit unit && unit.IsStorage && unit.PlayerName == playerName)
+            //if (node is Townhall unit && unit.IsStorage && unit.UnitPeerID == GetPlayer(playerName).PeerID)
+            {
+                float distance = position.DistanceTo(th.Position);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestStorage = th;
+                }
+            }
+        }
 
         return closestStorage;
     }

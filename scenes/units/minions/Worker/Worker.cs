@@ -17,37 +17,39 @@ public partial class Worker : Unit
     private Unit storageTarget = null;
     private Unit repairTarget = null;
 
+    private ProgressBar progressBar = null;
+
     private Array<Node> bodiesInInteractRange = new Array<Node>();
 
     [Export]
     private string materialTypeInBag = "";
     [Export]
     private uint amountOfMaterialInBag = 0;
-	public uint AmountOfMaterialInBag
-	{
-		get { return amountOfMaterialInBag; }
-		set
-		{
-			amountOfMaterialInBag = value;
-			progressBar.Value = value;
-		}
-	}
+    public uint AmountOfMaterialInBag
+    {
+        get { return amountOfMaterialInBag; }
+        set
+        {
+            amountOfMaterialInBag = value;
+            progressBar.Value = value;
+        }
+    }
 
 
-    public override void Worker()
-	{
-		AddReplicationProperty("ProgressBar:value", true, SceneReplicationConfig.ReplicationMode.OnChange);
-	}
-	
-	
+    public Worker()
+    {
+        AddReplicationProperty("ProgressBar:value", true, SceneReplicationConfig.ReplicationMode.OnChange);
+    }
+
+
     public override void _Ready()
     {
         base._Ready();
 
-		progressBar = GetNode<ProgressBar>("%ProgressBar");
-		progressBar.MaxValue = MaxMaterialsInBag;
+        progressBar = GetNode<ProgressBar>("%ProgressBar");
+        progressBar.MaxValue = MaxMaterialsInBag;
 
-		AmountOfMaterialInBag = 0;
+        AmountOfMaterialInBag = 0;
 
         interactArea = GetNode<Area2D>("%InteractArea");
         interactArea.BodyEntered += OnInteractAreaBodyEntered;
