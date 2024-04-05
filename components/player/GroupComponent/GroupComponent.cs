@@ -117,6 +117,9 @@ public partial class GroupComponent : Node
             return;
         }
 
+        //TODO: check if player is logged in
+
+
         foreach (Unit unit in Members)
         {
             unit.MoveTo(position);
@@ -130,6 +133,8 @@ public partial class GroupComponent : Node
         {
             return;
         }
+
+        //TODO: check if player is logged in
 
         Material material = Map.GetMaterial(materialName);
         if (material == null)
@@ -149,5 +154,86 @@ public partial class GroupComponent : Node
         {
             unit.GatherMaterial(material, storage);
         }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void AttackGroupRPC(string targetName)
+    {
+        if (!Multiplayer.IsServer())
+        {
+            return;
+        }
+
+        //TODO: check if player is logged in
+
+        Unit target = Map.GetUnit(targetName);
+        if (target == null)
+        {
+            GD.Print("Target not found");
+            return;
+        }
+
+        foreach (Unit unit in Members)
+        {
+            // unit.Attack(target);
+        }
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void RepairGroupRPC(string targetName)
+    {
+        if (!Multiplayer.IsServer())
+        {
+            return;
+        }
+
+        //TODO: check if player is logged in
+
+        Unit target = Map.GetUnit(targetName);
+        if (target == null)
+        {
+            GD.Print("Target not found");
+            return;
+        }
+
+        //Check if target is repairable
+        if (!target.IsRepairable)
+        {
+            GD.Print("Target is not a repairable unit");
+            return;
+        }
+
+        foreach (Unit unit in Members)
+        {
+            unit.RepairTarget(target);
+        }
+
+    }
+
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
+    public void TrainUnitGroupRPC(string trainingsCenter, string unitType)
+    {
+        if (!Multiplayer.IsServer())
+        {
+            return;
+        }
+
+        //TODO: check if player is logged in
+
+        Unit unit = Map.GetUnit(trainingsCenter);
+        if (unit == null)
+        {
+            GD.Print("Training center not found");
+            return;
+        }
+
+        //Check if unit is a training center
+        if (!unit.IsTrainingCenter)
+        {
+            GD.Print("Unit is not a training center");
+            return;
+        }
+
+        unit.TrainUnit(unitType);
     }
 }
