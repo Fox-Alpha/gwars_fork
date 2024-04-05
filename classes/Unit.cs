@@ -6,9 +6,12 @@ public partial class Unit : CharacterBody2D
     [Export]
     public string PlayerName { get; set; } = "";
 
-    public Map Map { get; set; } = null;
-    public virtual bool IsStorage { get; set; } = false;
-    protected Vector2 targetPosition = Vector2.Zero;
+	[Export]
+	public long UnitPeerID { get; set; } = -1;
+
+	public Map Map { get; set; } = null;
+	public virtual bool IsStorage { get; set; } = false;
+	protected Vector2 targetPosition = Vector2.Zero;
 
     protected Panel selectionPanel = null;
 
