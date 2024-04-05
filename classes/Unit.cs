@@ -10,6 +10,9 @@ public partial class Unit : CharacterBody2D
     [Export]
     public string PlayerName { get; set; } = "";
 
+    [Export]
+	public long UnitPeerID { get; set; } = -1;
+
     public Map Map { get; set; } = null;
     public virtual bool IsRepairable { get; set; } = false;
     public virtual bool IsStorage { get; set; } = false;
@@ -26,6 +29,7 @@ public partial class Unit : CharacterBody2D
         sceneReplicationConfig = new SceneReplicationConfig();
         AddReplicationProperty(".:position", true, SceneReplicationConfig.ReplicationMode.OnChange);
         AddReplicationProperty(".:PlayerName", true, SceneReplicationConfig.ReplicationMode.OnChange);
+        AddReplicationProperty(".:UnitPeerID", true, SceneReplicationConfig.ReplicationMode.OnChange);
 
         synchronizer = new MultiplayerSynchronizer();
         synchronizer.Name = "Synchronizer";

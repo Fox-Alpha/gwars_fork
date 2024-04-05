@@ -52,14 +52,17 @@ public partial class GroupComponent : Node
         return averagePosition / Members.Count;
     }
 
-    private void OnUnitsSelected(Array<Unit> units)
-    {
-        Array<string> unitNames = new Array<string>();
-        foreach (Unit unit in units)
-        {
-            unitNames.Add(unit.Name);
-            unit.SetSelected(true);
-        }
+	private void OnUnitsSelected(Array<Unit> units)
+	{
+		Array<string> unitNames = new Array<string>();
+		foreach (Unit unit in units)
+		{
+			if(Multiplayer.GetUniqueId() == unit.UnitPeerID)
+			{
+				unitNames.Add(unit.Name);
+				unit.SetSelected(true);
+			}
+		}
 
         Members = units.Duplicate();
 
@@ -87,15 +90,19 @@ public partial class GroupComponent : Node
             return;
         }
 
-        foreach (string unitName in units)
-        {
-            Unit unit = Map.GetUnit(unitName);
-            if (unit != null)
-            {
-                Members.Add(unit);
-            }
-        }
-    }
+		foreach (string unitName in units)
+		{
+			var pid = Multiplayer.GetRemoteSenderId();
+			Unit unit = Map.GetUnit(unitName);
+			if (unit != null)
+			{
+				if(unit.UnitPeerID == pid)
+				{
+					Members.Add(unit);
+				}
+			}
+		}
+	}
 
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer)]
