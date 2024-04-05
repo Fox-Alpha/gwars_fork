@@ -23,11 +23,25 @@ public partial class Worker : Unit
     private string materialTypeInBag = "";
     [Export]
     private uint amountOfMaterialInBag = 0;
+	public uint AmountOfMaterialInBag
+	{
+		get { return amountOfMaterialInBag; }
+		set
+		{
+			amountOfMaterialInBag = value;
+			progressBar.Value = value;
+		}
+	}
 
 
     public override void _Ready()
     {
         base._Ready();
+
+		progressBar = GetNode<ProgressBar>("%ProgressBar");
+		progressBar.MaxValue = MaxMaterialsInBag;
+
+		AmountOfMaterialInBag = 0;
 
         interactArea = GetNode<Area2D>("%InteractArea");
         interactArea.BodyEntered += OnInteractAreaBodyEntered;
